@@ -1,7 +1,6 @@
 FROM ubuntu:jammy-20220531
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV DISPLAY :0
 ENV LC_ALL=C
 
 
@@ -42,42 +41,13 @@ liblz4-dev libsnappy-dev libspandsp-dev libxml2-dev \
 apt-get autoremove -y && \
 apt-get clean
 
-RUN cd /opt && git clone https://github.com/wireshark/wireshark.git && cd wireshark && git checkout master-2.6
+RUN cd /opt && git clone https://github.com/wireshark/wireshark.git
 RUN cd /opt/wireshark && git checkout master-3.2
 
-
-	# qttools5-dev \
-	# qttools5-dev-tools \
-	# libqt5svg5-dev \
-	# qtmultimedia5-dev \
-	# qtbase5-dev \
-	# qtchooser \
-	# qt5-qmake \
-	# qtbase5-dev-tools \
-
-# qttools5-dev \
-# qttools5-dev-tools \
-# libgtk-3-dev \
-# qt5-default \
-
-# RUN apt-get install -y \
-
-
-
-# RUN mkdir -p /opt/wireshark/tools && cd /opt/wireshark/tools && wget https://raw.githubusercontent.com/wireshark/wireshark/master/tools/debian-setup.sh
-
-# RUN cat /opt/wireshark/tools/debian-setup.sh
-
-# RUN cd /opt/wireshark && tools/debian-setup.sh --install-optional --install-deb-deps python3-pip -y
-
-# RUN cd /opt/wireshark && git checkout 79afe8e && git submodule update --init --recursive
-
-# RUN cd /opt/wireshark && ./autogen.sh
 
 RUN cd /opt/wireshark/ && mkdir build && cd build && cmake ..
 
 RUN cd /opt/wireshark/build && make -j 10
-# RUN cd /opt/wireshark/build && make
 
 
 # ssh works with
