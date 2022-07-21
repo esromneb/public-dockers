@@ -41,6 +41,8 @@ liblz4-dev libsnappy-dev libspandsp-dev libxml2-dev \
 apt-get autoremove -y && \
 apt-get clean
 
+WORKDIR /src
+
 # RUN cd /opt && git clone https://github.com/wireshark/wireshark.git
 # RUN cd /opt/wireshark && git checkout master-3.2
 

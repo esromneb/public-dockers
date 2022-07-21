@@ -49,6 +49,7 @@ RUN cd /opt/wireshark/ && mkdir build && cd build && cmake ..
 
 RUN cd /opt/wireshark/build && make -j 10
 
+WORKDIR /src
 
 # ssh works with
 #        X11Forwarding yes
