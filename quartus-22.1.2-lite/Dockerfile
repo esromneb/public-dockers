@@ -3,7 +3,7 @@
 ###################################################################################################
 ###################################################################################################
 ###################################################################################################
-FROM ubuntu:jammy-20240911.1 AS base
+FROM ubuntu:jammy-20250819 AS base
 
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -31,7 +31,7 @@ RUN echo 'export LC_ALL=en_US.UTF-8' >> /root/.profile
 # SSH stuff
 
 RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config && \
-mkdir -p /root/.ssh && touch /root/.ssh/authorized_keys
+mkdir -p /root/.ssh && touch /root/.ssh/authorized_keys && chmod 600 -R /root/.ssh
 
 # build layer gets Quartus, and installs it
 ###################################################################################################
@@ -67,3 +67,15 @@ RUN cd /root/builds/quartus-lite-22.1.2/ && ./qinstall.sh
 FROM base AS final
 
 COPY --from=build /root/intelFPGA_lite /root/intelFPGA_lite
+
+
+#################### 
+# For Quartus
+
+# https://community.intel.com/t5/Intel-Quartus-Prime-Software/quartus-map-crash-possibly-due-to-shared-library-shenanigans/m-p/1285186
+COPY quartus_memory.c /opt/
+RUN cd /opt && gcc -shared -o quartus_memory.o quartus_memory.c -ldl
+
+RUN echo 'export LD_PRELOAD=/opt/quartus_memory.o' >> /root/.bashrc
+RUN echo 'export LD_PRELOAD=/opt/quartus_memory.o' >> /root/.profile
+ENV LD_PRELOAD=/opt/quartus_memory.o
